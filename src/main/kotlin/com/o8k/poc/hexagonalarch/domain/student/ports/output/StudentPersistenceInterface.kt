@@ -4,4 +4,5 @@ import com.o8k.poc.hexagonalarch.domain.student.Student
 
 interface StudentPersistenceInterface {
     fun save(student: Student): Student
+    fun findById(id: String): Student?
 }
