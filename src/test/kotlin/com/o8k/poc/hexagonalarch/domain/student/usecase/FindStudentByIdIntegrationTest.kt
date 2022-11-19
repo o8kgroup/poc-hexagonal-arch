@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class FindStudentByIdIntegrationTest: BaseDatabaseIntegrationTest() {
+class FindStudentByIdIntegrationTest : BaseDatabaseIntegrationTest() {
     @Autowired
     lateinit var findStudentByIdUseCase: FindStudentByIdUseCaseInterface
 
@@ -17,11 +17,14 @@ class FindStudentByIdIntegrationTest: BaseDatabaseIntegrationTest() {
 
     @Test
     fun `should find a student by id`() {
+        // Arrange
         val studentToSave = Student("abc", "Student Test")
         studentData.save(studentToSave)
 
+        // Act
         val savedStudent = findStudentByIdUseCase.findById("abc")
 
+        // Assert
         Assertions.assertEquals(studentToSave, savedStudent)
     }
 }
