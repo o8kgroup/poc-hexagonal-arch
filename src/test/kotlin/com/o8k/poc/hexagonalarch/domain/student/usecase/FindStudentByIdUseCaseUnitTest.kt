@@ -1,6 +1,7 @@
 package com.o8k.poc.hexagonalarch.domain.student.usecase
 
 import com.o8k.poc.hexagonalarch.domain.student.Student
+import com.o8k.poc.hexagonalarch.domain.student.exceptions.StudentNotFoundException
 import com.o8k.poc.hexagonalarch.domain.student.ports.output.StudentPersistenceInterface
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -31,5 +32,19 @@ internal class FindStudentByIdUseCaseUnitTest {
 
         // Assert
         Assertions.assertEquals(student, result)
+    }
+
+    @Test
+    fun `should throw an exception when student not found by id`() {
+        // Arrange
+        Mockito.`when`(studentPersistence.findById("abc")).then { null }
+
+        // Act
+        val exception =
+            org.junit.jupiter.api.assertThrows<StudentNotFoundException> { findStudentByIdUseCase.findById("abc") }
+
+        // Assert
+        val expected = "Student with id: abc not found!"
+        Assertions.assertEquals(expected, exception.message)
     }
 }

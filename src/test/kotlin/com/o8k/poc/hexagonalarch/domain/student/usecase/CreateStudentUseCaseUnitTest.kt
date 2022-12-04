@@ -1,6 +1,7 @@
 package com.o8k.poc.hexagonalarch.domain.student.usecase
 
 import com.o8k.poc.hexagonalarch.domain.student.Student
+import com.o8k.poc.hexagonalarch.domain.student.exceptions.InvalidStudentException
 import com.o8k.poc.hexagonalarch.domain.student.ports.output.StudentPersistenceInterface
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -29,5 +30,19 @@ class CreateStudentUseCaseUnitTest {
 
         // Assert
         Assertions.assertEquals(studentToSave, result)
+    }
+
+    @Test
+    fun `should throw exception when student not valid`() {
+        // Arrange
+        val studentToSave = Student("abc", "")
+
+        //Act
+        val exception =
+            org.junit.jupiter.api.assertThrows<InvalidStudentException> { createStudentUseCase.save(studentToSave) }
+
+        // Assert
+        val expected = "Sorry, check the information provided. Invalid operation!"
+        Assertions.assertEquals(expected, exception.message)
     }
 }

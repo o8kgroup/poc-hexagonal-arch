@@ -1,5 +1,6 @@
 package com.o8k.poc.hexagonalarch.domain.student.usecase
 
+import com.o8k.poc.hexagonalarch.domain.enums.ErrorCodes.HEX001
 import com.o8k.poc.hexagonalarch.domain.student.Student
 import com.o8k.poc.hexagonalarch.domain.student.exceptions.StudentNotFoundException
 import com.o8k.poc.hexagonalarch.domain.student.ports.input.FindStudentByIdUseCaseInterface
@@ -13,6 +14,6 @@ class FindStudentByIdUseCaseImpl(
 
     override fun findById(id: String): Student {
         return studentData.findById(id)
-            ?: throw StudentNotFoundException("Student not found")
+            ?: throw StudentNotFoundException(HEX001.msg.format("Student with id: $id"), HEX001.code)
     }
 }
