@@ -3,13 +3,17 @@ package com.o8k.poc.hexagonalarch.adapter.web.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.o8k.poc.hexagonalarch.adapter.web.BaseWebIntegrationTest
 import com.o8k.poc.hexagonalarch.adapter.web.reponses.StudentResponse
+import com.o8k.poc.hexagonalarch.domain.student.Student
 import com.o8k.poc.hexagonalarch.domain.student.ports.output.StudentPersistenceInterface
 import com.o8k.poc.hexagonalarch.templates.StudentRequestsTemplate
+import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 class StudentControllerIntegrationTest : BaseWebIntegrationTest() {
@@ -42,5 +46,20 @@ class StudentControllerIntegrationTest : BaseWebIntegrationTest() {
 
         val savedStudent = studentData.findById(studentResponse.id)
         Assertions.assertEquals(studentResponse.id, savedStudent?.id)
+    }
+
+    @Test
+    fun `should find a student by id`() {
+        // Arrange
+        val studentToSave = Student("abc", "Student Test")
+        studentData.save(studentToSave)
+
+        // Act and Assert
+        mvc.perform(
+            get("$BASE_URL/abc")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().is2xxSuccessful)
+            .andExpect(jsonPath("id", `is`("abc")))
     }
 }
